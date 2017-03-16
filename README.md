@@ -12,7 +12,7 @@
 4. 加入R类，通过注册/获取组件的方式减弱监听器与UI的耦合
 
 ## 截图
-![](https://github.com/TianLanhe/MatrixCalculator/raw/master/screenshot.jpg)
+![](https://github.com/TianLanhe/MatrixCalculator/raw/master/screenshot.png)
 
 ## 不足
 1. 结果显示界面有待改进
