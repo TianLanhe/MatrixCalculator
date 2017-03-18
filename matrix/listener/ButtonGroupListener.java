@@ -92,7 +92,11 @@ public class ButtonGroupListener implements ActionListener {
 								&& (i + 1) != row)
 							JOptionPane.showMessageDialog(null, "两个矩阵的行数必须相同！",
 									"提醒", JOptionPane.WARNING_MESSAGE);
-						else if (item == 8 && turn && (j + 1) != row)
+						else if (item == 8
+								&& turn
+								&& (buttonGroup == buttonGroupList.get(0)
+										&& (j + 1) != row || buttonGroup == buttonGroupList
+										.get(1) && (i + 1) != column))
 							JOptionPane.showMessageDialog(null,
 									"第一个矩阵的列数必须与第二个矩阵的行数相同！", "提醒",
 									JOptionPane.WARNING_MESSAGE);

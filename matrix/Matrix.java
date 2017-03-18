@@ -1,133 +1,39 @@
 package matrix;
 
-import javax.swing.*;
-
-import matrix.window.WindowIn;
-
-import java.awt.*;
 public class Matrix {
 	public double b[][]; // 储存输入的数组
 	public double f[][]; // 储存运算结果
-	WindowIn win;
-	public static boolean turn = false;
-	public void setWindow(WindowIn win) {
-		this.win = win;
+
+	public Matrix() {
+		b = null;
+		f = null;
 	}
 
-	public void input(JTextField text[][]) { // 输入任意矩阵
-		b = new double[text.length][text[0].length];
-		turn = true;
-		for (int i = 0; i < b.length; i++) {
-			for (int j = 0; j < b[0].length; j++) {
-				if (text[i][j].getText().equals("")) {
-					turn = false;
-				} else {
-					b[i][j] = Double.parseDouble(text[i][j].getText());
-				}
-			}
-		}
-		if (turn == false)
-			JOptionPane.showMessageDialog(win, "您没有为矩阵的每个元素赋值", "提醒",
-					JOptionPane.WARNING_MESSAGE);
+	public Matrix(double[][] input) {
+		setInput(input);
 	}
 
-	public void output(String a) { // 输出运算结果
+	public void setInput(double[][] input) {
+		b = copyArray(input);
+	}
+	
+	public double[][] getInput(){
+		return b;
+	}
+
+	public double[][] getOutput() {
 		Double zero = new Double(-0.0); // 将负零转化为正零，去掉零的负号
 		for (int i = 0; i < f.length; i++) {
 			for (int j = 0; j < f[0].length; j++) {
 				if (zero.equals(f[i][j]))
 					f[i][j] *= -1;
-			}
-		}
-		for (int i = 0; i < f.length; i++) {
-			for (int j = 0; j < f[0].length; j++) {
 				if (Math.ceil(f[i][j]) - f[i][j] <= 10e-5)
 					f[i][j] = Math.ceil(f[i][j]);
 				if (f[i][j] - Math.floor(f[i][j]) <= 10e-5)
 					f[i][j] = Math.floor(f[i][j]);
 			}
 		}
-		JLabel label = new JLabel("");
-		if (a == "齐通" || a == "非通" || a == "齐系" || a == "非系") {
-			if (a == "齐通")
-				label.setText("齐次线性方程组的通解为：");
-			if (a == "非通")
-				label.setText("非齐次线性方程组的通解为：");
-			if (a == "齐系")
-				label.setText("齐次线性方程组的基础解析系为");
-			if (a == "非系")
-				label.setText("非齐次线性方程组的基础解析系为：");
-			JPanel pane = new JPanel();
-			JTextField text[][][] = new JTextField[3][f.length][f[0].length];
-			pane.setLayout(new GridLayout(f.length, f[0].length * 3));
-			for (int k = 0; k < 3; k++) {
-				for (int i = 0; i < f.length; i++) {
-					for (int j = 0; j < f[0].length; j++) {
-						text[k][i][j] = new JTextField(2);
-						if (k == 0 && i == (f.length - 1) / 2) {
-							if (j == 0)
-								text[0][i][j].setText("=");
-							else
-								text[0][i][j].setText("+");
-						} else if (k == 1 && i == (f.length - 1) / 2) {
-							if (a == "齐系" || a == "非系")
-								text[1][i][j].setText("ξ" + (j + 1));
-							else if (a == "非通" && j != f[0].length - 1)
-								text[1][i][j].setText("c" + (j + 1));
-						} else if (k == 2) {
-							text[2][i][j].setText(String.valueOf(f[i][j]));
-						}
-						text[k][i][j].setEditable(false);
-					}
-				}
-			}
-			for (int i = 0; i < f.length; i++) {
-				for (int j = 0; j < f[0].length; j++) {
-					for (int k = 0; k < 3; k++) {
-						pane.add(text[k][i][j]);
-					}
-				}
-			}
-			JPanel pane_out = new JPanel();
-			pane_out.setLayout(new BorderLayout());
-			pane_out.add(label, BorderLayout.NORTH);
-			pane_out.add(pane, BorderLayout.SOUTH);
-			JOptionPane.showMessageDialog(win, pane_out, "计算结果",
-					JOptionPane.PLAIN_MESSAGE);
-
-		} else {
-			if (a == "逆阵")
-				label.setText("矩阵的逆矩阵为：");
-			if (a == "相乘")
-				label.setText("两个矩阵相乘：");
-			if (a == "相加")
-				label.setText("同型矩阵相加：");
-			if (a == "相减")
-				label.setText("同型矩阵相减：");
-			if (a == "数乘")
-				label.setText("数和矩阵相乘：");
-			if (a == "最简")
-				label.setText("矩阵的行最简形为：");
-			if (a == "无关")
-				label.setText("向量组的最大线性无关组为：");
-			JPanel pane = new JPanel();
-			JTextField text_out[][] = new JTextField[f.length][f[0].length];
-			pane.setLayout(new GridLayout(f.length, f[0].length));
-			for (int i = 0; i < f.length; i++) {
-				for (int j = 0; j < f[0].length; j++) {
-					text_out[i][j] = new JTextField(2);
-					text_out[i][j].setText(String.valueOf(f[i][j]));
-					text_out[i][j].setEditable(false);
-					pane.add(text_out[i][j]);
-				}
-			}
-			JPanel pane_out = new JPanel();
-			pane_out.setLayout(new BorderLayout());
-			pane_out.add(label, BorderLayout.NORTH);
-			pane_out.add(pane, BorderLayout.SOUTH);
-			JOptionPane.showMessageDialog(win, pane_out, "计算结果",
-					JOptionPane.PLAIN_MESSAGE);
-		}
+		return f;
 	}
 
 	/*
@@ -267,7 +173,7 @@ public class Matrix {
 		r.scalarmuti(t);
 		f = r.f;
 	}
-	
+
 	/*
 	 * 新建f的长度为 b.length × r.b[0].length，即第一个矩阵的行数乘以第二个矩阵的列数。设置三个循环
 	 * 一个控制第一个矩阵的行数，第二个循环控制第二个矩阵的列数，第三个循环依次检索第一（二）个矩阵那
@@ -283,7 +189,7 @@ public class Matrix {
 			}
 		}
 	}
-	
+
 	public void simplest() { // 求矩阵的行最简形
 		f = new double[b.length][b[0].length];
 		for (int i = 0; i < b.length; i++) { // 将b矩阵copy给f矩阵
@@ -338,7 +244,7 @@ public class Matrix {
 			}
 		}
 	}
-	
+
 	/*
 	 * 用上面的方法求出最简形（结果储存在f矩阵中），设置两个循环，一个控制最简形的行，一个控制列，
 	 * 一行一行从左到右检索，碰到非0数则rank加1，并跳出循环，若一行没有检索到非0数，则rank不会加1

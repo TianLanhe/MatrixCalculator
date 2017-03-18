@@ -1,5 +1,7 @@
 package matrix.listener;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -27,7 +29,10 @@ public class KeyPolice implements KeyListener {
 			if (e.getSource() == button_exit) {
 				System.exit(0);
 			} else if (e.getSource() == button_cal) {
-				// TODO
+				ActionListener[] listeners = button_cal.getActionListeners();
+				ActionEvent event=new ActionEvent(button_cal, 0, null);
+				for(ActionListener listener:listeners)
+					listener.actionPerformed(event);	//手动向调用该监听器的方法
 			}
 		}
 	}
